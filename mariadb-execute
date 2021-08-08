@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+declare -r file="docker-compose.yml"
+declare -r base=".services.mariadb.environment"
+declare db
+declare user
+declare password
+declare execute="$1"
+
+if [[ -n "$execute" ]];then
+    db="$(yq eval "$base.MYSQL_DATABASE" "$file")"
+    user="$(yq eval "$base.MYSQL_USER" "$file")"
+    password="$(yq eval "$base.MYSQL_PASSWORD" "$file")"
+    docker-compose exec mariadb mysql\
+        --user=$user\
+        --password=$password\
+        --database=$db\
+        --execute="$execute"
+fi

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# 
+
+[[ -z $1 || -z $2 || -z $3 || -z $4 ]]\
+&& echo -e "usage:\n./joinfile to/path namefile ext comment"\
+&& exit 1
+
+for i in $1/*;do
+    [[ -f "$i" && "$(file --mime "$i")" == *text* ]] && (
+        e="${i%.$3}"
+        e="${e##*/}"
+        echo -e "\n$4 -- $e --" >> $1/out
+        cat "$i" >> $1/out
+        # rm "$i"
+    )
+done
+sed 's/\r//g' $1/out > $1/$2.$3
+rm $1/out

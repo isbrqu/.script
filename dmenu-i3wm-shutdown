@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# msg='You pressed the exit shortcut.
+# Do you really want to exit i3? This will end your X session.'
+# i3-nagbar -t warning -m $msg -B 'Yes, exit i3' 'i3-msg exit'
+shutdown='shutdown'
+other='noooooo'
+response="$(echo -e "$other\n$shutdown" | dmenu)"
+case "$response" in
+    $shutdown) sudo shutdown now;;
+    *) exit 1;;
+esac
+    
+# echo -e "$b" | dmenu
+# i3-nagbar -t warning -m 'shutdown bro?' -B 'yes bro' 'sudo shutdown now'

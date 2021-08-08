@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+declare text="$(xclip -selection clipboard -out)" 
+declare b=~/w/b/b
+if [[ "$text" == http* ]];then
+    if [[ ! "$(grep -o "$text" $b)" ]];then
+        echo "$text" >> $b
+    fi
+fi

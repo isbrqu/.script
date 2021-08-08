@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+declare url
+declare path="$HOME/w/b/generic"
+declare username="isbrqu"
+declare action="$1"
+
+copy() {
+    local url
+    url="$(sudo -u "$username" xclip -selection clipboard -out)"
+    if [[ "$url" == http* ]];then
+        echo "$url" >> $path
+    fi
+}
+
+show() {
+    local url
+    url="$(grep "^http" $path | dmenu -l 10)"
+    if [[ -n "$url" ]];then
+        xdg-open "${url%% *}" &> /dev/null &
+        if (( $? == 0 ));then
+            disown
+        fi
+    fi
+}
+
+case "$action" in
+    copy)
+        copy
+        ;;
+    *)
+        show
+        ;;
+esac
+

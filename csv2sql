@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+import pandas
+import sys
+
+def get_columns(dataframe):
+    if len(sys.argv) > 3:
+        return sys.argv[3]
+    else:
+        return ','.join([key for key in dataframe.keys()])
+
+if len(sys.argv) < 3:
+    print('usage: cvs2sql table file.cvs [column1,column2]')
+else:
+    table = sys.argv[1]
+    file_ = sys.argv[2]
+    dataframe = pandas.read_csv(file_)
+    columns = get_columns(dataframe)
+    fields = columns.split(',')
+    for row in dataframe.itertuples():
+        values = ','.join([
+            f'"{str(getattr(row, field))}"'
+            for field in fields
+        ])
+        sql = f'insert into {table} ({columns}) values ({values});'
+        print(sql)

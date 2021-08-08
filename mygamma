@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+source ~/.config/dot/script/checklog
+
+declare gamma
+declare brightness
+
+brightness="$(cat $path_brightness)"
+[[ "$(cat $path_gamma)" == *0* ]]\
+&& gamma="1:1:1"\
+|| gamma="1.1:0.8:0.7"
+
+echo "$gamma" > $path_gamma
+
+while IFS= read -r line; do
+    xrandr --output "$line" --gamma "$gamma" --brightness "$brightness"
+done < "$path_monitor"
+

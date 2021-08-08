@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+declare mountable
+declare chosen
+declare directories
+
+mountable="$(lsblk --list --paths | grep "part $" | awk '{print $1, "(" $4 ")"}')"
+[[ -z "$mountable" ]] && exit 1
+chosen="$(echo "$mountable" | dmenu -i -p "mount which drive?" | awk '{print $1}')"
+[[ -z "$chosen" ]] && exit 1
+sudo mount "$chosen" && exit 0
+directories="$(find /mnt /media /home -type d -maxdepth 2)"
+mountpoint="$(echo "$directories" | dmenu -i -p "type in mount point.")"
+[[ -z "$mountpoint" ]] && exit 1
+if [[ ! -d "$mountpoint" ]];then
+    mkdiryn="$(echo -e "no\nyes" | dmenu -i -p "$mountpoint does not exist. create it?")"
+    [[ "$mkdiryn" == "yes" ]] && sudo mkdir -p "$mountpoint"
+fi
+sudo mount "$chosen" "$mountpoint" && pgrep -x dunst && notify-send "$chosen mounted to $mountpoint."
+
