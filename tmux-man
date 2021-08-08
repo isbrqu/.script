@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+vim -c "runtime ftplugin/man.vim"\
+    -c "set filetype=man"\
+    -c "Man $1"\
+    -c "only"
+
