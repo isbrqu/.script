@@ -1,8 +1,24 @@
 #!/usr/bin/env bash
 
-ln -s $HOME/.config/dot/i3wm           $HOME/.config/i3              
-ln -s $HOME/.config/dot/i3status       $HOME/.config/i3status        
-ln -s $HOME/.config/dot/vim            $HOME/.config/vim             
-ln -s $HOME/.config/dot/user-dirs.dirs $HOME/.config/user-dirs.dirs  
-ln -s $HOME/.config/dot/mimeapps.list  $HOME/.config/mimeapps.list   
-ln -s $HOME/.config/dot/script/b       $HOME/.config/i3              
+declare path_local_script="$(realpath $0)"
+declare path_local_src="${path_local_script%/*}/src"
+declare path_home_script="$HOME/.script"
+declare path_dest="$HOME/.local/bin"
+
+linker() {
+    local folder="$1"
+    for item in "$path_home_script/$folder/"*;do
+        ln --symbolic "$item" "$path_dest" 2> /dev/null
+    done
+}
+
+if [[ ! -e "$path_home_script" ]];then
+    ln --symbolic --force "$path_local_src" "$path_home_script" 2> /dev/null
+fi
+
+linker "config"
+linker "convert"
+linker "dmenu"
+linker "general"
+linker "docker"
+
