@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+usage() {
+    echo "usage: yt <audio|video|img> <format>"
+}
+
+error() {
+    usage
+    echo "option not found. Use audio, video or img"
+}
+
+main() {
+    local option="$1"
+    local format="$2"
+    local url
+    local OPTS
+    url="${3:-$(xclip -selection clipboard -out)}"
+    case "$option" in
+        audio)
+            OPTS="--extract-audio --audio-format $format"
+        ;;
+        video)
+            OPTS="--format $format"
+        ;;
+        img)
+            OPTS="--write-thumbnail --skip-download"
+        ;;
+        *)
+            error
+            exit 1
+        ;;
+    esac
+    youtube-dl $OPTS "$url"
+}
+
+main "$@"
