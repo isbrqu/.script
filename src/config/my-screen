@@ -11,7 +11,7 @@ main() {
     case "$mode" in
         nigth)
             gamma="1.1:0.8:0.7"
-            brightness="0.7"
+            brightness="0.5"
         ;;
         ligth)
             gamma="1:1:1"
