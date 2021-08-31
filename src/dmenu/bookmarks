@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
 
-declare url
-declare path="$HOME/w/b/generic"
-declare username="isbrqu"
-declare action="$1"
+declare -r path="$HOME/w/b/generic"
+
+clipboard() {
+    local clipboard
+    clipboard="$(xclip -selection clipboard -out)"
+    echo "$clipboard"
+}
 
 copy() {
-    local url
-    url="$(sudo -u "$username" xclip -selection clipboard -out)"
-    if [[ "$url" == http* ]];then
-        echo "$url" >> $path
+    local text
+    text="$(clipboard)"
+    if [[ "$text" == http* ]];then
+        echo "$text" >> $path
     fi
 }
 
 show() {
     local url
-    url="$(grep "^http" $path | dmenu -l 10)"
+    url="$(grep "^http" "$path" | dmenu -l 10)"
+    echo "$url"
+}
+
+open() {
+    local url="$1"
     if [[ -n "$url" ]];then
         xdg-open "${url%% *}" &> /dev/null &
         if (( $? == 0 ));then
@@ -24,12 +32,19 @@ show() {
     fi
 }
 
-case "$action" in
-    copy)
-        copy
-        ;;
-    *)
-        show
-        ;;
-esac
+main() {
+    local url
+    local action="$1"
+    case "$action" in
+        write)
+            copy
+            ;;
+        open)
+            url="$(show)"
+            open "$url"
+            ;;
+    esac
+}
+
+main "$@"
 
