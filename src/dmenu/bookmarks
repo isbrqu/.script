@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -r path="$HOME/w/b/generic"
+declare -r path="$HOME/w/b"
 
 clipboard() {
     local clipboard
@@ -8,7 +8,7 @@ clipboard() {
     echo "$clipboard"
 }
 
-copy() {
+write_in_file() {
     local text
     text="$(clipboard)"
     if [[ "$text" == http* ]];then
@@ -16,9 +16,33 @@ copy() {
     fi
 }
 
-show() {
+select_file() {
+    local files
+    files="$(ls -1 "$path" | dmenu -l 10)"
+    echo "$files"
+}
+
+select_url_from_file() {
     local url
-    url="$(grep "^http" "$path" | dmenu -l 10)"
+    local file="$1"
+    url="$(cat "$path/$file" | dmenu -l 10)"
+    echo "$url"
+}
+
+select_url_from_directory() {
+    local url
+    url="$(grep --no-filename "^http" "$path"/* | dmenu -l 10)"
+    echo "$url"
+}
+
+select_url() {
+    local url
+    local file="$1"
+    if [[ -n "$file" ]];then
+        url="$(select_url_from_file "$file")"
+    else
+        url="$(select_url_from_directory)"
+    fi
     echo "$url"
 }
 
@@ -34,15 +58,20 @@ open() {
 
 main() {
     local url
+    local file
     local action="$1"
     case "$action" in
         write)
-            copy
+            write_in_file
             ;;
         open)
-            url="$(show)"
+            url="$(select_url)"
             open "$url"
             ;;
+        open-file)
+            file="$(select_file)"
+            url="$(select_url "$file")"
+            open "$url"
     esac
 }
 
