@@ -70,7 +70,7 @@ main() {
     local file
     local action="$1"
     case "$action" in
-        write)
+        save)
             write_in_file
             ;;
         open)
