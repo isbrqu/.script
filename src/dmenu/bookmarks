@@ -70,8 +70,11 @@ main() {
             ;;
         open-file)
             file="$(select_file)"
-            url="$(select_url "$file")"
-            open "$url"
+            if [[ -n "$file" ]];then
+                url="$(select_url "$file")"
+                open "$url"
+            fi
+            ;;
     esac
 }
 
