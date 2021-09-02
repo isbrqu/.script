@@ -55,6 +55,15 @@ open() {
         fi
     fi
 }
+open_from_file() {
+    local url
+    local file="$1"
+    if [[ -n "$file" ]];then
+        url="$(select_url "$file")"
+        open "$url"
+    fi
+    echo "$url"
+}
 
 main() {
     local url
@@ -70,10 +79,7 @@ main() {
             ;;
         open-file)
             file="$(select_file)"
-            if [[ -n "$file" ]];then
-                url="$(select_url "$file")"
-                open "$url"
-            fi
+            open_from_file "$file"
             ;;
     esac
 }
