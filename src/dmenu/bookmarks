@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-declare -r path="$HOME/w/b"
+declare -r directory="$HOME/w/b"
 
 check_bookmarks_directory() {
-    if [[ ! -e "$path" ]];then
-        echo "error (1): '$path' does not exist" >&2
+    if [[ ! -e "$directory" ]];then
+        echo "error (1): '$directory' does not exist" >&2
         return 1
     fi
-    if [[ ! -d "$path" ]];then
-        echo "error (1): '$path' is not a directory" >&2
+    if [[ ! -d "$directory" ]];then
+        echo "error (1): '$directory' is not a directory" >&2
         return 1
     fi
-    if [[ ! -r "$path" ]];then
-        echo "error (1): '$path' does not have read permission" >&2
+    if [[ ! -r "$directory" ]];then
+        echo "error (1): '$directory' does not have read permission" >&2
         return 1
     fi
-    if [[ ! -x "$path" ]];then
-        echo "error (1): '$path' does not have execute permission" >&2
+    if [[ ! -x "$directory" ]];then
+        echo "error (1): '$directory' does not have execute permission" >&2
         return 1
     fi
 }
@@ -29,7 +29,7 @@ clipboard() {
 
 select_file() {
     local files
-    files="$(ls -1 "$path" | dmenu -l 10)"
+    files="$(ls -1 "$directory" | dmenu -l 10)"
     echo "$files"
 }
 
@@ -38,10 +38,10 @@ select_url() {
     local file="$1"
     if [[ -n "$file" ]];then
         # select from file
-        url="$(cat "$path/$file" | dmenu -l 10)"
+        url="$(cat "$directory/$file" | dmenu -l 10)"
     else
         # select from directory
-        url="$(grep --no-filename "^http" "$path"/* | dmenu -l 10)"
+        url="$(grep --no-filename "^http" "$directory"/* | dmenu -l 10)"
     fi
     echo "$url"
 }
@@ -64,7 +64,7 @@ save() {
     if [[ "$text" != http* ]];then
         return 1
     fi
-    echo "$text" >> "$path"/"$file"
+    echo "$text" >> "$directory"/"$file"
 }
 
 open_url() {
@@ -90,8 +90,8 @@ remove_url_from_file() {
         if [[ "$line" != "$url" ]];then
             echo "$line"
         fi
-    done < "$path"/"$file" > tmp
-    mv tmp "$path"/"$file"
+    done < "$directory"/"$file" > tmp
+    mv tmp "$directory"/"$file"
 }
 
 main() {
