@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+declare manual
+manual="$(apropos . | fzf)"
+manual="${manual%% *}"
 vim -c "runtime ftplugin/man.vim"\
     -c "set filetype=man"\
-    -c "Man $1"\
+    -c "Man $manual"\
     -c "only"
 
