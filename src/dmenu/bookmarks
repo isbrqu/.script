@@ -10,10 +10,12 @@ clipboard() {
 
 write_in_file() {
     local text
+    local file="$1"
     text="$(clipboard)"
-    if [[ "$text" == http* ]];then
-        echo "$text" >> $path
+    if [[ "$text" != http* ]];then
+        return 1
     fi
+    echo "$text" >> "$path"/"$file"
 }
 
 select_file() {
@@ -71,7 +73,8 @@ main() {
     local action="$1"
     case "$action" in
         save)
-            write_in_file
+            file="$(select_file)"
+            write_in_file "$file"
             ;;
         open)
             url="$(select_url)"
