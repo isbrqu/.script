@@ -87,6 +87,14 @@ open_url_from_file() {
     open "$url"
 }
 
+remove_url_from_file() {
+    local url
+    local file
+    file="$(select_file)"
+    url="$(select_url "$file")"
+    rm_url "$file" "$url"
+}
+
 main() {
     local url
     local file
@@ -95,11 +103,7 @@ main() {
         save) save ;;
         open) open_url ;;
         open-file) open_url_from_file ;;
-        rm)
-            file="$(select_file)"
-            url="$(select_url "$file")"
-            rm_url "$file" "$url"
-            ;;
+        rm) remove_url_from_file ;;
     esac
 }
 
