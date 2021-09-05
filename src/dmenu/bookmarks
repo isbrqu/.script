@@ -48,17 +48,6 @@ open() {
     fi
 }
 
-open_from_file() {
-    local url
-    local file="$1"
-    if [[ ! -r "$path"/"$file" ]];then
-        echo "error (1): file '$file' doesn't exist or cannot be read"
-        return 1
-    fi
-    url="$(select_url "$file")"
-    open "$url"
-}
-
 rm_url() {
     local file="$1"
     local url="$2"
@@ -90,6 +79,14 @@ open_url() {
     open "$url"
 }
 
+open_url_from_file() {
+    local url
+    local file
+    file="$(select_file)"
+    url="$(select_url "$file")"
+    open "$url"
+}
+
 main() {
     local url
     local file
@@ -97,10 +94,7 @@ main() {
     case "$action" in
         save) save ;;
         open) open_url ;;
-        open-file)
-            file="$(select_file)"
-            open_from_file "$file"
-            ;;
+        open-file) open_url_from_file ;;
         rm)
             file="$(select_file)"
             url="$(select_url "$file")"
