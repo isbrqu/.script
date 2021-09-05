@@ -61,11 +61,12 @@ open() {
 open_from_file() {
     local url
     local file="$1"
-    if [[ -n "$file" ]];then
-        url="$(select_url "$file")"
-        open "$url"
+    if [[ ! -r "$path"/"$file" ]];then
+        echo "error (1): file '$file' doesn't exist or cannot be read"
+        return 1
     fi
-    echo "$url"
+    url="$(select_url "$file")"
+    open "$url"
 }
 
 rm_url() {
