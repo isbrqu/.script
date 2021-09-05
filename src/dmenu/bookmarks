@@ -84,16 +84,19 @@ save() {
     echo "$text" >> "$path"/"$file"
 }
 
+open_url() {
+    local url
+    url="$(select_url)"
+    open "$url"
+}
+
 main() {
     local url
     local file
     local action="$1"
     case "$action" in
         save) save ;;
-        open)
-            url="$(select_url)"
-            open "$url"
-            ;;
+        open) open_url ;;
         open-file)
             file="$(select_file)"
             open_from_file "$file"
