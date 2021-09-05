@@ -14,26 +14,15 @@ select_file() {
     echo "$files"
 }
 
-select_url_from_file() {
-    local url
-    local file="$1"
-    url="$(cat "$path/$file" | dmenu -l 10)"
-    echo "$url"
-}
-
-select_url_from_directory() {
-    local url
-    url="$(grep --no-filename "^http" "$path"/* | dmenu -l 10)"
-    echo "$url"
-}
-
 select_url() {
     local url
     local file="$1"
     if [[ -n "$file" ]];then
-        url="$(select_url_from_file "$file")"
+        # select from file
+        url="$(cat "$path/$file" | dmenu -l 10)"
     else
-        url="$(select_url_from_directory)"
+        # select from directory
+        url="$(grep --no-filename "^http" "$path"/* | dmenu -l 10)"
     fi
     echo "$url"
 }
