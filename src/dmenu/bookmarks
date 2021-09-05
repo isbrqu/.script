@@ -8,16 +8,6 @@ clipboard() {
     echo "$clipboard"
 }
 
-write_in_file() {
-    local text
-    local file="$1"
-    text="$(clipboard)"
-    if [[ "$text" != http* ]];then
-        return 1
-    fi
-    echo "$text" >> "$path"/"$file"
-}
-
 select_file() {
     local files
     files="$(ls -1 "$path" | dmenu -l 10)"
@@ -83,15 +73,23 @@ rm_url() {
     mv tmp "$path"/"$file"
 }
 
+save() {
+    local file
+    local text
+    file="$(select_file)"
+    text="$(clipboard)"
+    if [[ "$text" != http* ]];then
+        return 1
+    fi
+    echo "$text" >> "$path"/"$file"
+}
+
 main() {
     local url
     local file
     local action="$1"
     case "$action" in
-        save)
-            file="$(select_file)"
-            write_in_file "$file"
-            ;;
+        save) save ;;
         open)
             url="$(select_url)"
             open "$url"
