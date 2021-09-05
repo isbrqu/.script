@@ -37,17 +37,6 @@ open() {
     fi
 }
 
-rm_url() {
-    local file="$1"
-    local url="$2"
-    while read -r line;do
-        if [[ "$line" != "$url" ]];then
-            echo "$line"
-        fi
-    done < "$path"/"$file" > tmp
-    mv tmp "$path"/"$file"
-}
-
 save() {
     local file
     local text
@@ -78,7 +67,12 @@ remove_url_from_file() {
     local file
     file="$(select_file)"
     url="$(select_url "$file")"
-    rm_url "$file" "$url"
+    while read -r line;do
+        if [[ "$line" != "$url" ]];then
+            echo "$line"
+        fi
+    done < "$path"/"$file" > tmp
+    mv tmp "$path"/"$file"
 }
 
 main() {
