@@ -10,3 +10,22 @@ if [[ -n "$manual" ]];then
         -c "only"
 fi
 
+# mensaje de advertencia y error
+# export MANPAGER="vim"
+
+# el formato no es le más apropiado para leer los titulos
+# se debe limpiar
+# export MANPAGER="vim -"
+
+# no usa vim
+# export MANPAGER="sh -c 'col -bx | bat --language man --plain'"
+
+# no funciona
+# export MANPAGER="col -b -x | view -c 'set filetype=man nomodified nolist' -"
+
+# mensaje de advertencia y error
+# export MANPAGER="sh -c 'col -b -x | vim'"
+export MANPAGER="man $1 "
+
+
+# https://stackoverflow.com/a/16740302
