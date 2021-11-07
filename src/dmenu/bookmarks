@@ -108,6 +108,7 @@ main() {
         open) open_url ;;
         open-file) open_url_from_file ;;
         rm) remove_url_from_file ;;
+        *) echo "<save|open|open-file|rm>" ;;
     esac
 }
 
