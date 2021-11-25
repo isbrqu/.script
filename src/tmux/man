@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+declare manual_line
 declare manual
-manual="$(apropos . | fzf)"
-manual="${manual%% *}"
-if [[ -n "$manual" ]];then
-    vim -c "runtime ftplugin/man.vim"\
-        -c "set filetype=man"\
-        -c "Man $manual"\
-        -c "only"
+manual_line="$(apropos . | fzf)"
+command_name="${manual_line%% *}"
+if [[ -n "$command_name" ]];then
+    tmux new-window man "$command_name"
+    # vim -c "runtime ftplugin/man.vim"\
+    #     -c "set filetype=man"\
+    #     -c "Man $command_name"\
+    #     -c "only"
 fi
 
 # mensaje de advertencia y error
@@ -25,7 +27,7 @@ fi
 
 # mensaje de advertencia y error
 # export MANPAGER="sh -c 'col -b -x | vim'"
-export MANPAGER="man $1 "
-
+# export MANPAGER="man $1"
 
 # https://stackoverflow.com/a/16740302
+
