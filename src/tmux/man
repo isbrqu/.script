@@ -2,7 +2,7 @@
 
 declare manual_line
 declare manual
-manual_line="$(apropos . | fzf)"
+manual_line="$(apropos . | awk '{print $1}' | fzf)"
 command_name="${manual_line%% *}"
 if [[ -n "$command_name" ]];then
     tmux new-window man "$command_name"
