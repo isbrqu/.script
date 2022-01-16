@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+declare filepath="${TMUX_SCRIPT}/fugitive"
+declare msgerror
+msgerror="$(git status 2>&1)"
+if (( $? != 0 ));then
+    tmux display-message "${msgerror}"
+    exit
+fi
+vim -c :Git -c :only
