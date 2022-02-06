@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-file="$(fzf)"\
-&& tmux split-window $1 vim "$file"
