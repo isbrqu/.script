@@ -16,5 +16,8 @@ if [[ ! -d "$mountpoint" ]];then
     mkdiryn="$(echo -e "no\nyes" | dmenu -i -p "$mountpoint does not exist. create it?")"
     [[ "$mkdiryn" == "yes" ]] && sudo mkdir -p "$mountpoint"
 fi
-sudo mount "$chosen" "$mountpoint" && pgrep -x dunst && notify-send "$chosen mounted to $mountpoint."
-
+sudo mount "$chosen" "$mountpoint"
+if (( $? == 0 ));then
+     pgrep -x dunst
+     notify-send "$chosen mounted to $mountpoint."
+fi
