@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+declare fullpath="${1}"
+
+if [[ "${fullpath}" != */src/* ]];then
+    echo "src directory not found"
+fi
+declare option="reload"
+declare directory="${fullpath%/src/*}"
+declare src="${directory}/src"
+declare build="${directory}/build"
+declare classpath
+declare -i error
+cd "${directory}"
+
+while [[ "${option}" == r* ]];do
+    echo "==== COMPILING ===="
+    javac -d "${build}" --source-path "${src}" "${fullpath}"
+    error="$?"
+    echo "==== COMPILED ===="
+    if (( $error == 0 ));then
+        clear
+        echo "==== RUN ===="
+        classpath="${fullpath/\/src\//\/build\/}"
+        classpath="${classpath#*/build/}"
+        classpath="${classpath%.*}"
+        java --class-path "${build}" "${classpath}"
+        echo "==== FINISH! ===="
+    fi
+    echo -n "OPTION: "
+    read option
+done
