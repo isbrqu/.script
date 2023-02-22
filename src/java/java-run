@@ -4,6 +4,7 @@ declare fullpath="${1}"
 
 if [[ "${fullpath}" != */src/* ]];then
     echo "src directory not found"
+    exit 1
 fi
 declare option="reload"
 declare directory="${fullpath%/src/*}"
